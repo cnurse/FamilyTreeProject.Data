@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Database Name="FamilyTreeProject" xmlns="http://schemas.microsoft.com/linqtosql/mapping/2007">
+  <Table Name="Individuals">
+    <Type Name="FamilyTreeProject.Individual">
+      <Column Name="IndividualId" Member="Id" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TreeId" Member="TreeId" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FirstName" Member="FirstName" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="LastName" Member="LastName" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="FatherId" Member="FatherId" DbType="Int" CanBeNull="true" />
+      <Column Name="MotherId" Member="MotherId" DbType="Int" CanBeNull="true" />
+      <Column Name="Sex" Member="Sex" DbType="Int" CanBeNull="true" />
+      <Association Name="FK_Individuals_Father" Member="Father" ThisKey="FatherId" IsForeignKey="true" OtherKey="Id" />
+      <Association Name="FK_Individuals_Mother" Member="Mother" ThisKey="MotherId" IsForeignKey="true" OtherKey="Id"/>
+    </Type>
+  </Table>
+  <Table Name="Families">
+    <Type Name="FamilyTreeProject.Family">
+      <Column Name="FamilyId" Member="Id" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false"  />
+      <Column Name="TreeId" Member="TreeId" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="HusbandId" Member="HusbandId" DbType="Int" CanBeNull="true" />
+      <Column Name="WifeId" Member="WifeId" DbType="Int" CanBeNull="true" />
+      <Association Name="FK_Families_Individuals_Husband" Member="Husband" ThisKey="HusbandId" OtherKey="Id" IsForeignKey="true" />
+      <Association Name="FK_Families_Individuals_Wife" Member="Wife" ThisKey="WifeId" OtherKey="Id" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>

@@ -1,0 +1,250 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C50E96F6-A363-4757-AD5B-F9E452314DCE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FamilyTreeProject.GEDCOM.Data.Tests</RootNamespace>
+    <AssemblyName>FamilyTreeProject.GEDCOM.Data.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FamilyTreeProject.GEDCOM, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\FamilyTreeProject.GEDCOM.0.1.0\lib\FamilyTreeProject.GEDCOM.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FamilyTreeProject.Models, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\FamilyTreeProject.Models.0.1.0\lib\FamilyTreeProject.Models.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Bcl.Async.1.0.165\lib\net45\Microsoft.Threading.Tasks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Bcl.Async.1.0.165\lib\net45\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Moq, Version=4.2.1409.1722, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Moq.4.2.1409.1722\lib\net40\Moq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Naif.Core, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Naif.Core.1.1.0\lib\Naif.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Naif.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Naif.Data.1.0.0\lib\Naif.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\packages\NUnit.2.5.10.11092\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.mocks">
+      <HintPath>..\..\packages\NUnit.2.5.10.11092\lib\nunit.mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="PCLStorage, Version=1.0.2.0, Culture=neutral, PublicKeyToken=286fe515a2c35b64, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\PCLStorage.1.0.2\lib\net45\PCLStorage.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PCLStorage.Abstractions, Version=1.0.2.0, Culture=neutral, PublicKeyToken=286fe515a2c35b64, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\PCLStorage.1.0.2\lib\net45\PCLStorage.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="pnunit.framework">
+      <HintPath>..\..\packages\NUnit.2.5.10.11092\lib\pnunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\GEDCOMAssert.cs" />
+    <Compile Include="Common\GEDCOMTestBase.cs" />
+    <Compile Include="GEDCOMDataContextTests.cs" />
+    <Compile Include="GEDCOMFamilyRepositoryTests.cs" />
+    <Compile Include="GEDCOMIndividualRepositoryTests.cs" />
+    <Compile Include="GEDCOMStoreTests.Common.cs" />
+    <Compile Include="GEDCOMStoreTests.Family.cs" />
+    <Compile Include="GEDCOMStoreTests.Individual.cs" />
+    <Compile Include="IndividualsResources.Designer.cs">
+      <DependentUpon>IndividualsResources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="SharedResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SharedResources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SharedResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SharedResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\FamilyTreeProject.Data.GEDCOM\FamilyTreeProject.Data.GEDCOM.csproj">
+      <Project>{4B904183-F155-42A3-8CFD-0D907BB10CDA}</Project>
+      <Name>FamilyTreeProject.Data.GEDCOM</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FamilyTreeProject.TestUtilities\FamilyTreeProject.TestUtilities.csproj">
+      <Project>{E5B4368F-6BC1-46D8-9B4D-88FE08682AA1}</Project>
+      <Name>FamilyTreeProject.TestUtilities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="IndividualsResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>IndividualsResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TestFiles\TwoIndividuals.ged" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="TestFiles\NoRecords.ged" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="TestFiles\OneIndividual.ged" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="TestFiles\TwoIndividuals_UpdateIndividual.ged" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="TestFiles\OneIndividual_UpdateIndividual.ged" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="TestFiles\TwoFamilies.ged" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="TestFiles\OneFamily.ged" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="TestFiles\OneFamily_UpdateFamily.ged" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="TestFiles\TwoFamilies_UpdateFamily.ged" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="TestFiles\BindingTest.ged" />
+    <EmbeddedResource Include="TestFiles\TwoIndividuals_AddFamilyAddHusband.ged" />
+    <EmbeddedResource Include="TestFiles\TwoIndividuals_AddFamilyAddWife.ged" />
+    <EmbeddedResource Include="TestFiles\TwoIndividuals_AddFamilyAddHusbandAndWife.ged" />
+    <EmbeddedResource Include="TestFiles\TwoIndividuals_AddFamilyAddChild1.ged" />
+    <EmbeddedResource Include="TestFiles\TwoIndividuals_AddFamilyAddChild2.ged" />
+    <EmbeddedResource Include="TestFiles\ThreeIndividuals.ged" />
+    <EmbeddedResource Include="TestFiles\ThreeIndividuals_UpdateIndividualAddFamilyAddHusband.ged" />
+    <EmbeddedResource Include="TestFiles\ThreeIndividuals_UpdateIndividualAddFamilyAddWife.ged" />
+    <EmbeddedResource Include="TestFiles\ThreeIndividuals_OneFamily.ged" />
+    <EmbeddedResource Include="TestFiles\ThreeIndividuals_OneFamily_UpdateIndividual.ged" />
+    <EmbeddedResource Include="TestFiles\ThreeIndividuals_OneFamilyHusband.ged" />
+    <EmbeddedResource Include="TestFiles\ThreeIndividuals_OneFamilyWife.ged" />
+    <EmbeddedResource Include="TestFiles\ThreeIndividuals_OneFamilyHusband_UpdateIndividual.ged" />
+    <EmbeddedResource Include="TestFiles\ThreeIndividuals_OneFamilyWife_UpdateIndividual.ged" />
+    <EmbeddedResource Include="TestFiles\FiveIndividuals_OneFamily.ged" />
+    <EmbeddedResource Include="TestFiles\FiveIndividuals_UpdateFather_NewFamily.ged" />
+    <EmbeddedResource Include="TestFiles\FiveIndividuals_UpdateMother_NewFamily.ged" />
+    <EmbeddedResource Include="TestFiles\FiveIndividuals_ThreeFamilies.ged" />
+    <EmbeddedResource Include="TestFiles\FiveIndividuals_ThreeFamilies_UpdateFather.ged" />
+    <EmbeddedResource Include="TestFiles\FiveIndividuals_ThreeFamilies_UpdateMother.ged" />
+    <EmbeddedResource Include="TestFiles\FiveIndividuals_ThreeFamilies_DeleteChild.ged" />
+    <EmbeddedResource Include="TestFiles\FiveIndividuals_ThreeFamilies_DeleteWife.ged" />
+    <EmbeddedResource Include="TestFiles\FiveIndividuals_ThreeFamilies_DeleteHusband.ged" />
+    <EmbeddedResource Include="TestFiles\ThreeIndividuals_OneFamily_AddIndividual.ged" />
+    <EmbeddedResource Include="TestFiles\ThreeIndividuals_OneFamilyHusband_AddIndividual.ged" />
+    <EmbeddedResource Include="TestFiles\ThreeIndividuals_OneFamilyWife_AddIndividual.ged" />
+    <EmbeddedResource Include="TestFiles\FourIndividuals_AddIndividualAddFamilyAddHusband.ged" />
+    <EmbeddedResource Include="TestFiles\FourIndividuals_AddIndividualAddFamilyAddWife.ged" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
