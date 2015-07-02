@@ -7,6 +7,7 @@
 // *****************************************
 
 using System;
+using System.Collections.Generic;
 using FamilyTreeProject.Data.GEDCOM;
 using Moq;
 using Naif.Core.Caching;
@@ -19,29 +20,16 @@ namespace FamilyTreeProject.GEDCOM.Data.Tests
     public class GEDCOMFamilyRepositoryTests
     {
         [Test]
-        public void Constructor_Throws_On_Null_CacheProvider()
-        {
-            //Arrange
-            var mockStore = new Mock<IGEDCOMStore>();
-
-            //Act
-
-            //Assert
-            Assert.Throws<ArgumentNullException>(() => new GEDCOMFamilyRepository(mockStore.Object, null));
-        }
-
-        [Test]
         public void Constructor_Throws_On_Null_Database()
         {
             //Arrange
-            var mockCache = new Mock<ICacheProvider>();
             IGEDCOMStore database = null;
 
             //Act
 
             //Assert
             // ReSharper disable once ExpressionIsAlwaysNull
-            Assert.Throws<ArgumentNullException>(() => new GEDCOMFamilyRepository(database, mockCache.Object));
+            Assert.Throws<ArgumentNullException>(() => new GEDCOMFamilyRepository(database));
         }
 
         [Test]
@@ -49,8 +37,7 @@ namespace FamilyTreeProject.GEDCOM.Data.Tests
         {
             //Arrange
             var mockStore = new Mock<IGEDCOMStore>();
-            var mockCache = new Mock<ICacheProvider>();
-            var rep = new GEDCOMFamilyRepository(mockStore.Object, mockCache.Object);
+            var rep = new GEDCOMFamilyRepository(mockStore.Object);
 
             //Act, Assert
             Assert.Throws<ArgumentNullException>(() => rep.Add(null));
@@ -61,8 +48,7 @@ namespace FamilyTreeProject.GEDCOM.Data.Tests
         {
             //Arrange
             var mockStore = new Mock<IGEDCOMStore>();
-            var mockCache = new Mock<ICacheProvider>();
-            var rep = new GEDCOMFamilyRepository(mockStore.Object, mockCache.Object);
+            var rep = new GEDCOMFamilyRepository(mockStore.Object);
             var family = new Family();
 
             //Act
@@ -77,8 +63,7 @@ namespace FamilyTreeProject.GEDCOM.Data.Tests
         {
             //Arrange
             var mockStore = new Mock<IGEDCOMStore>();
-            var mockCache = new Mock<ICacheProvider>();
-            var rep = new GEDCOMFamilyRepository(mockStore.Object, mockCache.Object);
+            var rep = new GEDCOMFamilyRepository(mockStore.Object);
 
             //Act, Assert
             Assert.Throws<ArgumentNullException>(() => rep.Delete(null));
@@ -89,8 +74,7 @@ namespace FamilyTreeProject.GEDCOM.Data.Tests
         {
             //Arrange
             var mockStore = new Mock<IGEDCOMStore>();
-            var mockCache = new Mock<ICacheProvider>();
-            var rep = new GEDCOMFamilyRepository(mockStore.Object, mockCache.Object);
+            var rep = new GEDCOMFamilyRepository(mockStore.Object);
             var family = new Family();
 
             //Act
@@ -105,38 +89,14 @@ namespace FamilyTreeProject.GEDCOM.Data.Tests
         {
             //Arrange
             var mockStore = new Mock<IGEDCOMStore>();
-            var mockCache = new Mock<ICacheProvider>();
-            var rep = new GEDCOMFamilyRepository(mockStore.Object, mockCache.Object);
+            mockStore.Setup(s => s.Families).Returns(() => new List<Family>());
+            var rep = new GEDCOMFamilyRepository(mockStore.Object);
 
             //Act
-            var individuals = rep.GetAll();
+            var families = rep.GetAll();
 
             //Assert
             mockStore.Verify(s => s.Families);
-        }
-
-        [Test]
-        public void GetById_Throws()
-        {
-            //Arrange
-            var mockStore = new Mock<IGEDCOMStore>();
-            var mockCache = new Mock<ICacheProvider>();
-            var rep = new GEDCOMFamilyRepository(mockStore.Object, mockCache.Object);
-
-            //Act, Assert
-            Assert.Throws<NotImplementedException>(() => rep.GetById(-1));
-        }
-
-        [Test]
-        public void GetByProperty_Throws()
-        {
-            //Arrange
-            var mockStore = new Mock<IGEDCOMStore>();
-            var mockCache = new Mock<ICacheProvider>();
-            var rep = new GEDCOMFamilyRepository(mockStore.Object, mockCache.Object);
-
-            //Act, Assert
-            Assert.Throws<NotImplementedException>(() => rep.GetByProperty("TreeId", -1));
         }
 
         [Test]
@@ -144,8 +104,7 @@ namespace FamilyTreeProject.GEDCOM.Data.Tests
         {
             //Arrange
             var mockStore = new Mock<IGEDCOMStore>();
-            var mockCache = new Mock<ICacheProvider>();
-            var rep = new GEDCOMFamilyRepository(mockStore.Object, mockCache.Object);
+            var rep = new GEDCOMFamilyRepository(mockStore.Object);
 
             //Act, Assert
             Assert.Throws<ArgumentNullException>(() => rep.Update(null));
@@ -156,8 +115,7 @@ namespace FamilyTreeProject.GEDCOM.Data.Tests
         {
             //Arrange
             var mockStore = new Mock<IGEDCOMStore>();
-            var mockCache = new Mock<ICacheProvider>();
-            var rep = new GEDCOMFamilyRepository(mockStore.Object, mockCache.Object);
+            var rep = new GEDCOMFamilyRepository(mockStore.Object);
             var family = new Family();
 
             //Act

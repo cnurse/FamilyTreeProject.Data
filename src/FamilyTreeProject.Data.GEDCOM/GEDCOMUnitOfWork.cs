@@ -13,12 +13,12 @@ using Naif.Data;
 
 namespace FamilyTreeProject.Data.GEDCOM
 {
-    public class GEDCOMDataContext : IDataContext
+    public class GEDCOMUnitOfWork : IUnitOfWork
     {
         private ICacheProvider _cache;
         private IGEDCOMStore _database;
 
-        public GEDCOMDataContext(string path, ICacheProvider cache)
+        public GEDCOMUnitOfWork(string path, ICacheProvider cache)
         {
             Requires.NotNullOrEmpty("path", path);
             Requires.NotNull("cache", cache);
@@ -26,7 +26,7 @@ namespace FamilyTreeProject.Data.GEDCOM
             Initialize(new GEDCOMStore(path), cache);
         }
 
-        public GEDCOMDataContext(IGEDCOMStore database, ICacheProvider cache)
+        public GEDCOMUnitOfWork(IGEDCOMStore database, ICacheProvider cache)
         {
             Requires.NotNull("database", database);
             Requires.NotNull("cache", cache);
@@ -53,16 +53,23 @@ namespace FamilyTreeProject.Data.GEDCOM
 
         public IRepository<T> GetRepository<T>() where T : class
         {
+            throw new NotImplementedException();
+        }
+
+        public ILinqRepository<T> GetLinqRepository<T>() where T : class
+        {
             if (typeof(T) == typeof(Individual))
             {
-                return new GEDCOMIndividualRepository(_database, _cache)as IRepository<T>;
+                return new GEDCOMIndividualRepository(_database) as ILinqRepository<T>;
             }
             if (typeof(T) == typeof(Family))
             {
-                return new GEDCOMFamilyRepository(_database, _cache)as IRepository<T>;
+                return new GEDCOMFamilyRepository(_database) as ILinqRepository<T>;
             }
             throw new NotImplementedException();
         }
+
+        public bool SupportsLinq { get; }
 
         public void RollbackTransaction()
         {

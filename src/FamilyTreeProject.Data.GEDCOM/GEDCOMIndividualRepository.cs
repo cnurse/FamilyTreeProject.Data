@@ -7,60 +7,64 @@
 // *****************************************
 
 using System;
-using System.Collections.Generic;
-using Naif.Core.Caching;
+using System.Linq;
+using System.Linq.Expressions;
+using Naif.Core.Collections;
 using Naif.Core.Contracts;
 using Naif.Data;
 
 namespace FamilyTreeProject.Data.GEDCOM
 {
-    public class GEDCOMIndividualRepository : RepositoryBase<Individual>
+    public class GEDCOMIndividualRepository : ILinqRepository<Individual>
     {
         private readonly IGEDCOMStore _database;
 
-        public GEDCOMIndividualRepository(IGEDCOMStore database, ICacheProvider cache) : base(cache)
+        public GEDCOMIndividualRepository(IGEDCOMStore database)
         {
-            Requires.NotNull("database", database);
+            Requires.NotNull(database);
 
             _database = database;
         }
 
-        protected override void AddInternal(Individual individual)
+        public void Add(Individual item)
         {
-            Requires.NotNull("individual", individual);
+            Requires.NotNull(item);
 
-            _database.AddIndividual(individual);
+            _database.AddIndividual(item);
         }
 
-        protected override void DeleteInternal(Individual individual)
+        public void Delete(Individual item)
         {
-            Requires.NotNull("individual", individual);
+            Requires.NotNull(item);
 
-            _database.DeleteIndividual(individual);
+            _database.DeleteIndividual(item);
         }
 
-        protected override IEnumerable<Individual> GetAllInternal()
+        public IQueryable<Individual> Find(Expression<Func<Individual, bool>> predicate)
         {
-            return _database.Individuals;
+            return GetAll().Where(predicate);
         }
 
-        protected override Individual GetByIdInternal<TProperty>(TProperty id)
+        public IPagedList<Individual> Find(int pageIndex, int pageSize, Expression<Func<Individual, bool>> predicate)
         {
-            // TODO: Implement this method
-            throw new NotImplementedException();
+            return GetAll().Where(predicate).InPagesOf(pageSize).GetPage(pageIndex);
         }
 
-        protected override IEnumerable<Individual> GetByPropertyInternal<TProperty>(string propertyName, TProperty propertyValue)
+        public IQueryable<Individual> GetAll()
         {
-            // TODO: Implement this method
-            throw new NotImplementedException();
+            return _database.Individuals.AsQueryable();
         }
 
-        protected override void UpdateInternal(Individual individual)
+        public IPagedList<Individual> GetPage(int pageIndex, int pageSize)
         {
-            Requires.NotNull("individual", individual);
+            return GetAll().InPagesOf(pageSize).GetPage(pageIndex);
+        }
 
-            _database.UpdateIndividual(individual);
+        public void Update(Individual item)
+        {
+            Requires.NotNull(item);
+
+            _database.UpdateIndividual(item);
         }
     }
 }

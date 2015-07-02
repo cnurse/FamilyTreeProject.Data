@@ -16,6 +16,7 @@ using FamilyTreeProject.GEDCOM.Records;
 using FamilyTreeProject.GEDCOM.Structures;
 using Naif.Core.Contracts;
 using PCLStorage;
+
 // ReSharper disable UseStringInterpolation
 
 namespace FamilyTreeProject.Data.GEDCOM
@@ -99,12 +100,12 @@ namespace FamilyTreeProject.Data.GEDCOM
             {
                 var familyRecord = (GEDCOMFamilyRecord) gedcomRecord;
                 var family = new Family
-                {
-                    Id = familyRecord.GetId(),
-                    HusbandId = GEDCOMUtil.GetId(familyRecord.Husband),
-                    WifeId = GEDCOMUtil.GetId(familyRecord.Wife),
-                    TreeId = DEFAULT_TREE_ID
-                };
+                                    {
+                                        Id = familyRecord.GetId(),
+                                        HusbandId = GEDCOMUtil.GetId(familyRecord.Husband),
+                                        WifeId = GEDCOMUtil.GetId(familyRecord.Wife),
+                                        TreeId = DEFAULT_TREE_ID
+                                    };
 
                 foreach (string child in familyRecord.Children)
                 {
@@ -131,13 +132,13 @@ namespace FamilyTreeProject.Data.GEDCOM
             {
                 var individualRecord = (GEDCOMIndividualRecord) gedcomRecord;
                 var individual = new Individual
-                {
-                    Id = individualRecord.GetId(),
-                    FirstName = individualRecord.Name.GivenName,
-                    LastName = individualRecord.Name.LastName,
-                    Sex = individualRecord.Sex,
-                    TreeId = DEFAULT_TREE_ID
-                };
+                                        {
+                                            Id = individualRecord.GetId(),
+                                            FirstName = individualRecord.Name.GivenName,
+                                            LastName = individualRecord.Name.LastName,
+                                            Sex = individualRecord.Sex,
+                                            TreeId = DEFAULT_TREE_ID
+                                        };
 
                 foreach (var eventStructure in individualRecord.Events)
                 {

@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Models\Dog.cs" />
     <Compile Include="TestConstants.cs" />
     <Compile Include="TestUtils.cs" />
   </ItemGroup>

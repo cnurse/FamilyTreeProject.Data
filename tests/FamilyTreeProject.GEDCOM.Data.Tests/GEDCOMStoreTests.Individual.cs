@@ -42,7 +42,7 @@ namespace FamilyTreeProject.GEDCOM.Data.Tests
         [TestCase("NoRecords", 1)]
         [TestCase("OneIndividual", 2)]
         [TestCase("TwoIndividuals", 3)]
-        public void GEDCOMStore_AddIndividual_Should_Insert_The_Individual_Into_The_DataContext(string fileName, int recordCount)
+        public void GEDCOMStore_AddIndividual_Should_Insert_The_Individual_Into_The_UnitOfWork(string fileName, int recordCount)
         {
             //Arrange
             const string testFile = "AddIndividual.ged";
@@ -158,7 +158,7 @@ namespace FamilyTreeProject.GEDCOM.Data.Tests
         [TestCase("OneIndividual", 1, 0)]
         [TestCase("TwoIndividuals", 1, 1)]
         [TestCase("TwoIndividuals", 2, 1)]
-        public void GEDCOMStore_DeleteIndividual_Should_Remove_The_Individual_From_The_DataContext(string fileName, int idToDelete, int recordCount)
+        public void GEDCOMStore_DeleteIndividual_Should_Remove_The_Individual_From_The_UnitOfWork(string fileName, int idToDelete, int recordCount)
         {
             //Arrange
             const string testFile = "DeleteIndividual.ged";

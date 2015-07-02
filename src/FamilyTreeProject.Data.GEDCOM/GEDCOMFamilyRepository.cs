@@ -7,60 +7,64 @@
 // *****************************************
 
 using System;
-using System.Collections.Generic;
-using Naif.Core.Caching;
+using System.Linq;
+using System.Linq.Expressions;
+using Naif.Core.Collections;
 using Naif.Core.Contracts;
 using Naif.Data;
 
 namespace FamilyTreeProject.Data.GEDCOM
 {
-    public class GEDCOMFamilyRepository : RepositoryBase<Family>
+    public class GEDCOMFamilyRepository : ILinqRepository<Family>
     {
         private readonly IGEDCOMStore _database;
 
-        public GEDCOMFamilyRepository(IGEDCOMStore database, ICacheProvider cache) : base(cache)
+        public GEDCOMFamilyRepository(IGEDCOMStore database)
         {
-            Requires.NotNull("database", database);
+            Requires.NotNull(database);
 
             _database = database;
         }
 
-        protected override void AddInternal(Family family)
+        public void Add(Family item)
         {
-            Requires.NotNull("family", family);
+            Requires.NotNull(item);
 
-            _database.AddFamily(family);
+            _database.AddFamily(item);
         }
 
-        protected override void DeleteInternal(Family family)
+        public void Delete(Family item)
         {
-            Requires.NotNull("family", family);
+            Requires.NotNull(item);
 
-            _database.DeleteFamily(family);
+            _database.DeleteFamily(item);
         }
 
-        protected override IEnumerable<Family> GetAllInternal()
+        public IQueryable<Family> Find(Expression<Func<Family, bool>> predicate)
         {
-            return _database.Families;
+            return GetAll().Where(predicate);
         }
 
-        protected override Family GetByIdInternal<TProperty>(TProperty id)
+        public IPagedList<Family> Find(int pageIndex, int pageSize, Expression<Func<Family, bool>> predicate)
         {
-            // TODO: Implement this method
-            throw new NotImplementedException();
+            return GetAll().Where(predicate).InPagesOf(pageSize).GetPage(pageIndex);
         }
 
-        protected override IEnumerable<Family> GetByPropertyInternal<TProperty>(string propertyName, TProperty propertyValue)
+        public IQueryable<Family> GetAll()
         {
-            // TODO: Implement this method
-            throw new NotImplementedException();
+            return _database.Families.AsQueryable();
         }
 
-        protected override void UpdateInternal(Family family)
+        public IPagedList<Family> GetPage(int pageIndex, int pageSize)
         {
-            Requires.NotNull("family", family);
+            return GetAll().InPagesOf(pageSize).GetPage(pageIndex);
+        }
 
-            _database.UpdateFamily(family);
+        public void Update(Family item)
+        {
+            Requires.NotNull(item);
+
+            _database.UpdateFamily(item);
         }
     }
 }

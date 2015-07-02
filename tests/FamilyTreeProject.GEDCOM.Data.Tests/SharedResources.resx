@@ -142,7 +142,7 @@ CREATE DATABASE [{0}]</value>
     <value>Test.ged</value>
   </data>
   <data name="GEDCOMTestFilePath" xml:space="preserve">
-    <value>C:\GitHub\Personal\Family Tree Project\FamilyTreeProject.Data\tests\FamilyTreeProject.GEDCOM.Data.Tests\TestFiles</value>
+    <value>C:\GitHub\Personal\FamilyTreeProject.Data\tests\FamilyTreeProject.GEDCOM.Data.Tests\TestFiles</value>
   </data>
   <data name="Namespace" xml:space="preserve">
     <value>FamilyTreeProject.Integration.Tests</value>

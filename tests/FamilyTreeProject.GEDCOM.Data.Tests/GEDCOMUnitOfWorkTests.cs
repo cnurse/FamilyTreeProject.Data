@@ -8,6 +8,7 @@
 
 using System;
 using FamilyTreeProject.Data.GEDCOM;
+using FamilyTreeProject.TestUtilities.Models;
 using Moq;
 using Naif.Core.Caching;
 using NUnit.Framework;
@@ -17,7 +18,7 @@ using NUnit.Framework;
 namespace FamilyTreeProject.GEDCOM.Data.Tests
 {
     [TestFixture]
-    public class GEDCOMDataContextTests
+    public class GEDCOMUnitOfWorkTests
     {
         [Test]
         public void Constructor_Throws_On_Null_CacheProvider()
@@ -27,7 +28,7 @@ namespace FamilyTreeProject.GEDCOM.Data.Tests
             //Act
 
             //Assert
-            Assert.Throws<ArgumentNullException>(() => new GEDCOMDataContext("testPath", null));
+            Assert.Throws<ArgumentNullException>(() => new GEDCOMUnitOfWork("testPath", null));
         }
 
         [Test]
@@ -39,7 +40,7 @@ namespace FamilyTreeProject.GEDCOM.Data.Tests
             //Act
 
             //Assert
-            Assert.Throws<ArgumentException>(() => new GEDCOMDataContext(String.Empty, mockCache.Object));
+            Assert.Throws<ArgumentException>(() => new GEDCOMUnitOfWork(String.Empty, mockCache.Object));
         }
 
         [Test]
@@ -51,7 +52,7 @@ namespace FamilyTreeProject.GEDCOM.Data.Tests
             //Act
 
             //Assert
-            Assert.Throws<ArgumentNullException>(() => new GEDCOMDataContext(mockStore.Object, null));
+            Assert.Throws<ArgumentNullException>(() => new GEDCOMUnitOfWork(mockStore.Object, null));
         }
 
         [Test]
@@ -65,7 +66,7 @@ namespace FamilyTreeProject.GEDCOM.Data.Tests
 
             //Assert
             // ReSharper disable once ExpressionIsAlwaysNull
-            Assert.Throws<ArgumentNullException>(() => new GEDCOMDataContext(database, mockCache.Object));
+            Assert.Throws<ArgumentNullException>(() => new GEDCOMUnitOfWork(database, mockCache.Object));
         }
 
         [Test]
@@ -74,40 +75,64 @@ namespace FamilyTreeProject.GEDCOM.Data.Tests
             //Arrange
             var mockCache = new Mock<ICacheProvider>();
             var mockStore = new Mock<IGEDCOMStore>();
-            var dataContext = new GEDCOMDataContext(mockStore.Object, mockCache.Object);
+            var unitOfWork = new GEDCOMUnitOfWork(mockStore.Object, mockCache.Object);
 
             //Act
-            dataContext.Commit();
+            unitOfWork.Commit();
 
             //Assert
             mockStore.Verify(s => s.SaveChangesAsync(), Times.Once);
         }
 
         [Test]
-        public void GetRepository_Returns_IndividualRepository_If_T_Is_Individual()
+        public void GetRepository_Throws()
         {
             //Arrange
             var mockCache = new Mock<ICacheProvider>();
             var mockStore = new Mock<IGEDCOMStore>();
-            var dataContext = new GEDCOMDataContext(mockStore.Object, mockCache.Object);
+            var unitOfWork = new GEDCOMUnitOfWork(mockStore.Object, mockCache.Object);
+
+            //Act, Assert
+            Assert.Throws<NotImplementedException>(() => unitOfWork.GetRepository<Individual>());
+        }
+
+        [Test]
+        public void GetLinqRepository_Throws_If_T_Not_Recognised()
+        {
+            //Arrange
+            var mockCache = new Mock<ICacheProvider>();
+            var mockStore = new Mock<IGEDCOMStore>();
+            var unitOfWork = new GEDCOMUnitOfWork(mockStore.Object, mockCache.Object);
+
+            //Act, Assert
+            Assert.Throws<NotImplementedException>(() => unitOfWork.GetLinqRepository<Dog>());
+        }
+
+        [Test]
+        public void GetLinqRepository_Returns_IndividualRepository_If_T_Is_Individual()
+        {
+            //Arrange
+            var mockCache = new Mock<ICacheProvider>();
+            var mockStore = new Mock<IGEDCOMStore>();
+            var unitOfWork = new GEDCOMUnitOfWork(mockStore.Object, mockCache.Object);
 
             //Act
-            var rep = dataContext.GetRepository<Individual>();
+            var rep = unitOfWork.GetLinqRepository<Individual>();
 
             //Assert
             Assert.IsInstanceOf<GEDCOMIndividualRepository>(rep);
         }
 
         [Test]
-        public void GetRepository_Returns_FamilyRepository_If_T_Is_Family()
+        public void GetLinqRepository_Returns_FamilyRepository_If_T_Is_Family()
         {
             //Arrange
             var mockCache = new Mock<ICacheProvider>();
             var mockStore = new Mock<IGEDCOMStore>();
-            var dataContext = new GEDCOMDataContext(mockStore.Object, mockCache.Object);
+            var unitOfWork = new GEDCOMUnitOfWork(mockStore.Object, mockCache.Object);
 
             //Act
-            var rep = dataContext.GetRepository<Family>();
+            var rep = unitOfWork.GetLinqRepository<Family>();
 
             //Assert
             Assert.IsInstanceOf<GEDCOMFamilyRepository>(rep);
@@ -119,10 +144,10 @@ namespace FamilyTreeProject.GEDCOM.Data.Tests
             //Arrange
             var mockCache = new Mock<ICacheProvider>();
             var mockStore = new Mock<IGEDCOMStore>();
-            var dataContext = new GEDCOMDataContext(mockStore.Object, mockCache.Object);
+            var unitOfWork = new GEDCOMUnitOfWork(mockStore.Object, mockCache.Object);
 
             //Act, Assert
-            Assert.Throws<NotImplementedException>(() => dataContext.GetRepository<Note>());
+            Assert.Throws<NotImplementedException>(() => unitOfWork.GetRepository<Note>());
         }
     }
 }
