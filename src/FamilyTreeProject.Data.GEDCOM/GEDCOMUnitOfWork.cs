@@ -53,23 +53,16 @@ namespace FamilyTreeProject.Data.GEDCOM
 
         public IRepository<T> GetRepository<T>() where T : class
         {
-            throw new NotImplementedException();
-        }
-
-        public ILinqRepository<T> GetLinqRepository<T>() where T : class
-        {
             if (typeof(T) == typeof(Individual))
             {
-                return new GEDCOMIndividualRepository(_database) as ILinqRepository<T>;
+                return new GEDCOMIndividualRepository(_database) as IRepository<T>;
             }
             if (typeof(T) == typeof(Family))
             {
-                return new GEDCOMFamilyRepository(_database) as ILinqRepository<T>;
+                return new GEDCOMFamilyRepository(_database) as IRepository<T>;
             }
             throw new NotImplementedException();
         }
-
-        public bool SupportsLinq { get; }
 
         public void RollbackTransaction()
         {

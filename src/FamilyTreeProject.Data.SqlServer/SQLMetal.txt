@@ -1,1 +1,0 @@
-﻿SqlMetal /server:Aragorn /database:FamilyTreeProject /map:"D:\My Projects\Family Tree Project\Source\FamilyTreeProject.Data.SqlServer\FamilyTreeProject.xml" /code:"D:\My Projects\Family Tree Project\Source\FamilyTreeProject.Data.SqlServer\FamilyTreeProject.cs"

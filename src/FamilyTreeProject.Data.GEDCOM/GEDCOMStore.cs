@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using FamilyTreeProject.Common;
 using FamilyTreeProject.GEDCOM;
 using FamilyTreeProject.GEDCOM.Common;
@@ -16,7 +17,9 @@ using FamilyTreeProject.GEDCOM.Records;
 using FamilyTreeProject.GEDCOM.Structures;
 using Naif.Core.Contracts;
 using PCLStorage;
+// ReSharper disable UseNullPropagation
 
+// ReSharper disable InconsistentNaming
 // ReSharper disable UseStringInterpolation
 
 namespace FamilyTreeProject.Data.GEDCOM
@@ -25,9 +28,7 @@ namespace FamilyTreeProject.Data.GEDCOM
     {
         private GEDCOMDocument _document;
         private readonly string _path;
-// ReSharper disable InconsistentNaming
         private const int DEFAULT_TREE_ID = 1;
-// ReSharper restore InconsistentNaming
 
         public GEDCOMStore(string path)
         {
@@ -41,6 +42,10 @@ namespace FamilyTreeProject.Data.GEDCOM
         public List<Family> Families { get;private set; }
 
         public List<Individual> Individuals { get;private set; }
+
+        public List<Repository> Repositories { get; private set; }
+
+        public List<Source> Sources { get; private set; }
 
         private void CreateNewFamily(Individual individual)
         {
@@ -77,6 +82,10 @@ namespace FamilyTreeProject.Data.GEDCOM
 
             ProcessIndividuals();
             ProcessFamilies();
+
+            ProcessRepositories();
+
+            ProcessSources();
         }
 
         private void LoadDocument()
@@ -89,6 +98,83 @@ namespace FamilyTreeProject.Data.GEDCOM
             using (var stream = file.OpenAsync(FileAccess.Read).Result)
             {
                 _document.Load(stream);
+            }
+        }
+
+        private void ProcessCitations(Entity entity, List<GEDCOMSourceCitationStructure> citations)
+        {
+            foreach (var citationStructure in citations)
+            {
+                if (citationStructure == null) continue;
+
+                var newCitation = new Citation()
+                                        {
+                                            Date = citationStructure.Date,
+                                            Page = citationStructure.Page,
+                                            Text = citationStructure.Text,
+                                            SourceId = GEDCOMUtil.GetId(citationStructure.XRefId),
+                                            OwnerId = entity.Id,
+                                            OwnerType = (entity is Individual) 
+                                                        ? EntityType.Individual
+                                                        :(entity is Fact) 
+                                                            ? EntityType.Fact
+                                                            : EntityType.Family
+                                        };
+
+                var factEntity = entity as Fact;
+                if (factEntity != null)
+                {
+                    factEntity.Citations.Add(newCitation);
+                }
+                else
+                {
+                    var ancestorEntity = entity as AncestorEntity;
+                    if (ancestorEntity != null)
+                    {
+                        ancestorEntity.Citations.Add(newCitation);
+                    }
+                }
+
+                ProcessMultimedia(entity, citationStructure.Multimedia);
+
+                ProcessNotes(entity, citationStructure.Notes);
+            }
+        }
+
+        private void ProcessFacts(AncestorEntity entity, List<GEDCOMEventStructure> events)
+        {
+            foreach (var eventStructure in events)
+            {
+                var newFact = new Fact()
+                                    {
+                                        Date = eventStructure.Date,
+                                        Place = (eventStructure.Place != null) ? eventStructure.Place.Data : string.Empty,
+                                        OwnerId = entity.Id,
+                                        OwnerType = (entity is Individual) ? EntityType.Individual : EntityType.Family
+                                    };
+
+                switch (eventStructure.EventClass)
+                {
+                    case EventClass.Individual:
+                        newFact.FactType = eventStructure.IndividualEventType;
+                        break;
+                    case EventClass.Family:
+                        newFact.FactType = eventStructure.FamilyEventType;
+                        break;
+                    case EventClass.Attribute:
+                        newFact.FactType = eventStructure.IndividualAttributeType;
+                        break;
+                    default:
+                        newFact.FactType = FactType.Unknown;
+                        break;
+                }
+                entity.Facts.Add(newFact);
+
+                ProcessMultimedia(newFact, eventStructure.Multimedia);
+
+                ProcessNotes(newFact, eventStructure.Notes);
+
+                ProcessCitations(newFact, eventStructure.SourceCitations);
             }
         }
 
@@ -106,6 +192,14 @@ namespace FamilyTreeProject.Data.GEDCOM
                                         WifeId = GEDCOMUtil.GetId(familyRecord.Wife),
                                         TreeId = DEFAULT_TREE_ID
                                     };
+
+                ProcessFacts(family, familyRecord.Events);
+
+                ProcessMultimedia(family, familyRecord.Multimedia);
+
+                ProcessNotes(family, familyRecord.Notes);
+
+                ProcessCitations(family, familyRecord.SourceCitations);
 
                 foreach (string child in familyRecord.Children)
                 {
@@ -134,40 +228,145 @@ namespace FamilyTreeProject.Data.GEDCOM
                 var individual = new Individual
                                         {
                                             Id = individualRecord.GetId(),
-                                            FirstName = individualRecord.Name.GivenName,
-                                            LastName = individualRecord.Name.LastName,
+                                            FirstName = (individualRecord.Name != null) ? individualRecord.Name.GivenName : String.Empty,
+                                            LastName = (individualRecord.Name != null) ? individualRecord.Name.LastName : String.Empty,
                                             Sex = individualRecord.Sex,
                                             TreeId = DEFAULT_TREE_ID
                                         };
 
-                foreach (var eventStructure in individualRecord.Events)
-                {
-                    var newEvent = new IndividualEvent
-                    {
-                        Date = eventStructure.Date,
-                        Place = (eventStructure.Place != null) ? eventStructure.Place.Data : string.Empty,
-                        EventType = eventStructure.IndividualEventType
-                    };
-                    individual.Events.Add(newEvent);
-                }
+                ProcessFacts(individual, individualRecord.Events);
 
-                foreach (var noteStructure in individualRecord.Notes)
-                {
-                    if (String.IsNullOrEmpty(noteStructure.XRefId))
-                    {
-                        individual.Notes.Add(new Note { Text = noteStructure.Text });
-                    }
-                    else
-                    {
-                        var noteRecord = _document.NoteRecords[noteStructure.XRefId] as GEDCOMNoteRecord;
-                        if (noteRecord != null)
-                        {
-                            individual.Notes.Add(new Note { Text = noteRecord.Data });
-                        }
-                    }
-                }
+                ProcessMultimedia(individual, individualRecord.Multimedia);
+
+                ProcessNotes(individual, individualRecord.Notes);
+
+                ProcessCitations(individual, individualRecord.SourceCitations);
 
                 Individuals.Add(individual);
+            }
+        }
+
+        private void ProcessMultimedia(Entity entity, List<GEDCOMMultimediaStructure> multimedia)
+        {
+            foreach (var multimediaStructure in multimedia)
+            {
+                var multimediaLink = new MultimediaLink()
+                                            {
+                                                File = multimediaStructure.FileReference,
+                                                Format = multimediaStructure.Format,
+                                                Title = multimediaStructure.Title,
+                                                OwnerId = entity.Id,
+                                                OwnerType = (entity is Individual)
+                                                    ? EntityType.Individual
+                                                    : (entity is Fact)
+                                                        ? EntityType.Fact
+                                                        : (entity is Family)
+                                                            ? EntityType.Family
+                                                            : EntityType.Citation
+                                            };
+
+
+                entity.Multimedia.Add(multimediaLink);
+            }
+        }
+
+        private void ProcessNote(Entity entity, string noteText)
+        {
+            if (!String.IsNullOrEmpty(noteText))
+            {
+                var newNote = new Note
+                {
+                    Text = noteText,
+                    OwnerId = entity.Id
+                };
+                if (entity is Individual)
+                {
+                    newNote.OwnerType = EntityType.Individual;
+                }
+                else if (entity is Family)
+                {
+                    newNote.OwnerType = EntityType.Family;
+                }
+                else if (entity is Fact)
+                {
+                    newNote.OwnerType = EntityType.Fact;
+                }
+                else if (entity is Source)
+                {
+                    newNote.OwnerType = EntityType.Source;
+                }
+                else if (entity is Repository)
+                {
+                    newNote.OwnerType = EntityType.Repository;
+                }
+                entity.Notes.Add(newNote);
+            }
+        }
+
+        private void ProcessNotes(Entity entity, List<GEDCOMNoteStructure> notes)
+        {
+            foreach (var noteStructure in notes)
+            {
+                if (String.IsNullOrEmpty(noteStructure.XRefId))
+                {
+                    ProcessNote(entity, noteStructure.Text);
+                }
+                else
+                {
+                    var noteRecord = _document.NoteRecords[noteStructure.XRefId] as GEDCOMNoteRecord;
+                    if (noteRecord != null && !String.IsNullOrEmpty(noteRecord.Data))
+                    {
+
+                        ProcessNote(entity, noteRecord.Data);
+                    }
+                }
+            }
+        }
+
+        private void ProcessRepositories()
+        {
+            Repositories = new List<Repository>();
+
+            foreach (var gedcomRecord in _document.RepositoryRecords)
+            {
+                var repositoryRecord = (GEDCOMRepositoryRecord)gedcomRecord;
+                var repository = new Repository
+                                        {
+                                            Id = repositoryRecord.GetId(),
+                                            Address = repositoryRecord.Address.Address,
+                                            Name = repositoryRecord.Name,
+                                            TreeId = DEFAULT_TREE_ID
+                                        };
+
+                ProcessNotes(repository, repositoryRecord.Notes);
+
+                Repositories.Add(repository);
+            }
+        }
+
+        private void ProcessSources()
+        {
+            Sources = new List<Source>();
+
+            foreach (var gedcomRecord in _document.SourceRecords)
+            {
+                var sourceRecord = (GEDCOMSourceRecord)gedcomRecord;
+                var source = new Source
+                                    {
+                                        Id = sourceRecord.GetId(),
+                                        Author = sourceRecord.Author,
+                                        Title = sourceRecord.Title,
+                                        Publisher = sourceRecord.PublisherInfo,
+                                        TreeId = DEFAULT_TREE_ID
+                                    };
+                if (sourceRecord.SourceRepository != null)
+                {
+                    source.RepositoryId = GEDCOMUtil.GetId(sourceRecord.SourceRepository.XRefId);
+                }
+
+                ProcessNotes(source, sourceRecord.Notes);
+
+                Sources.Add(source);
             }
         }
 

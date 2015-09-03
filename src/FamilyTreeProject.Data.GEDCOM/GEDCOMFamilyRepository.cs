@@ -7,6 +7,7 @@
 // *****************************************
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Naif.Core.Collections;
@@ -15,7 +16,7 @@ using Naif.Data;
 
 namespace FamilyTreeProject.Data.GEDCOM
 {
-    public class GEDCOMFamilyRepository : ILinqRepository<Family>
+    public class GEDCOMFamilyRepository : IRepository<Family>
     {
         private readonly IGEDCOMStore _database;
 
@@ -40,7 +41,17 @@ namespace FamilyTreeProject.Data.GEDCOM
             _database.DeleteFamily(item);
         }
 
-        public IQueryable<Family> Find(Expression<Func<Family, bool>> predicate)
+        public IEnumerable<Family> Find(string sqlCondition, params object[] args)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IPagedList<Family> Find(int pageIndex, int pageSize, string sqlCondition, params object[] args)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Family> Find(Expression<Func<Family, bool>> predicate)
         {
             return GetAll().Where(predicate);
         }
@@ -48,6 +59,26 @@ namespace FamilyTreeProject.Data.GEDCOM
         public IPagedList<Family> Find(int pageIndex, int pageSize, Expression<Func<Family, bool>> predicate)
         {
             return GetAll().Where(predicate).InPagesOf(pageSize).GetPage(pageIndex);
+        }
+
+        public IEnumerable<Family> Get<TScopeType>(TScopeType scopeValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerable<Family> IRepository<Family>.GetAll()
+        {
+            return GetAll();
+        }
+
+        public Family GetById<TProperty>(TProperty id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Family GetById<TProperty, TScopeType>(TProperty id, TScopeType scopeValue)
+        {
+            throw new NotImplementedException();
         }
 
         public IQueryable<Family> GetAll()
@@ -60,11 +91,21 @@ namespace FamilyTreeProject.Data.GEDCOM
             return GetAll().InPagesOf(pageSize).GetPage(pageIndex);
         }
 
+        public IPagedList<Family> GetPage<TScopeType>(TScopeType scopeValue, int pageIndex, int pageSize)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Update(Family item)
         {
             Requires.NotNull(item);
 
             _database.UpdateFamily(item);
+        }
+
+        public IEnumerable<Family> GetByProperty<TProperty>(string propertyName, TProperty propertyValue)
+        {
+            throw new NotImplementedException();
         }
     }
 }
