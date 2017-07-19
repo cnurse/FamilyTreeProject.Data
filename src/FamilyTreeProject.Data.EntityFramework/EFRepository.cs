@@ -8,17 +8,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Linq.Expressions;
-using Naif.Core.Caching;
-using Naif.Core.Collections;
-using Naif.Core.Contracts;
-using Naif.Data;
+using FamilyTreeProject.Collections;
+using FamilyTreeProject.Contracts;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal;
 
 namespace FamilyTreeProject.Data.EntityFramework
 {
-    public class EFRepository<T> : RepositoryBase<T> where T : class
+    public class EFRepository<T> : IRepository<T> where T : class
     {
         private readonly FamilyTreeContext _db;
 
@@ -27,84 +25,57 @@ namespace FamilyTreeProject.Data.EntityFramework
         /// </summary>
         private DbSet<T> EntitySet
         {
-            // ReSharper disable once ConvertPropertyToExpressionBody
             get { return _db.Set<T>(); }
         }
 
-        public EFRepository(FamilyTreeContext db, ICacheProvider cache) : base(cache)
+        public EFRepository(FamilyTreeContext db)
         {
             Requires.NotNull(db);
 
             _db = db;
         }
 
-        public override IEnumerable<T> Find(string sqlCondition, params object[] args)
+        public void Add(T item)
         {
-            throw new NotImplementedException();
-        }
+            Requires.NotNull(item);
 
-        public override IPagedList<T> Find(int pageIndex, int pageSize, string sqlCondition, params object[] args)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override IEnumerable<T> Find(Expression<Func<T, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override IPagedList<T> Find(int pageIndex, int pageSize, Expression<Func<T, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void AddInternal(T item)
-        {
             EntitySet.Add(item);
         }
 
-        protected override void DeleteInternal(T item)
+        public void Delete(T item)
         {
-            throw new NotImplementedException();
+            EntitySet.Remove(item);
         }
 
-        protected override IEnumerable<T> GetAllInternal()
+        public IEnumerable<T> Find(Func<T, bool> predicate)
         {
-            throw new NotImplementedException();
+            return EntitySet.Where(predicate);
         }
 
-        protected override T GetByIdInternal(object id)
+        public IPagedList<T> Find(int pageIndex, int pageSize, Func<T, bool> predicate)
         {
-            throw new NotImplementedException();
+            return GetAll().Where(predicate).InPagesOf(pageSize).GetPage(pageIndex);
         }
 
-        protected override IEnumerable<T> GetByScopeInternal(object scopeValue)
+        public IEnumerable<T> GetAll()
         {
-            throw new NotImplementedException();
+            return EntitySet;
         }
 
-        protected override IPagedList<T> GetPageByScopeInternal(object scopeValue, int pageIndex, int pageSize)
+        public IPagedList<T> GetPage(int pageIndex, int pageSize)
         {
-            throw new NotImplementedException();
+            return GetAll().InPagesOf(pageSize).GetPage(pageIndex);
         }
 
-        protected override IPagedList<T> GetPageInternal(int pageIndex, int pageSize)
+        public void Update(T item)
         {
-            throw new NotImplementedException();
-        }
+            Requires.NotNull(item);
 
-        protected override void UpdateInternal(T item)
-        {
             if (_db.Entry(item).State == EntityState.Detached)
             {
                 EntitySet.Attach(item);
             }
             _db.Entry(item).State = EntityState.Modified;
-        }
-
-        protected override IEnumerable<T> GetByPropertyInternal<TProperty>(string propertyName, TProperty propertyValue)
-        {
-            throw new NotImplementedException();
         }
     }
 }

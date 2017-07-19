@@ -44,17 +44,17 @@ namespace FamilyTreeProject.Data.GEDCOM.Tests
 
             //Act
             db.AddFamily(newFamily);
-            db.SaveChangesAsync();
+            db.SaveChanges();
 
             //Assert
             Assert.AreEqual(recordCount, GetFamilyCount(testFile));
         }
 
         [Test]
-        [TestCase("NoRecords", 1)]
-        [TestCase("OneFamily", 2)]
-        [TestCase("TwoFamilies", 3)]
-        public void GEDCOMStore_AddFamily_Should_Return_The_Id_Of_The_Family(string fileName, int recordId)
+        [TestCase("NoRecords", "1")]
+        [TestCase("OneFamily", "2")]
+        [TestCase("TwoFamilies", "3")]
+        public void GEDCOMStore_AddFamily_Should_Return_The_Id_Of_The_Family(string fileName, string recordId)
         {
             //Arrange
             string testFile = "AddFamily.ged";
@@ -63,43 +63,37 @@ namespace FamilyTreeProject.Data.GEDCOM.Tests
 
             //Act
             db.AddFamily(newFamily);
-            db.SaveChangesAsync();
+            db.SaveChanges();
 
             //Assert
             Assert.AreEqual(recordId, newFamily.Id);
         }
 
         [Test]
-        [TestCase("TwoIndividuals", 1, -1, "TwoIndividuals_AddFamilyAddHusband")]
-        [TestCase("TwoIndividuals", -1, 2, "TwoIndividuals_AddFamilyAddWife")]
-        [TestCase("TwoIndividuals", 1, 2, "TwoIndividuals_AddFamilyAddHusbandAndWife")]
-        public void GEDCOMStore_AddFamily_Should_Add_Husband_And_Wife(string fileName, int husbandId, int wifeId, string updatedFileName)
+        [TestCase("TwoIndividuals", "1", "", "TwoIndividuals_AddFamilyAddHusband")]
+        [TestCase("TwoIndividuals", "", "2", "TwoIndividuals_AddFamilyAddWife")]
+        [TestCase("TwoIndividuals", "1", "2", "TwoIndividuals_AddFamilyAddHusbandAndWife")]
+        public void GEDCOMStore_AddFamily_Should_Add_Husband_And_Wife(string fileName, string husbandId, string wifeId, string updatedFileName)
         {
             //Arrange
             const string testFile = "AddFamily.ged";
             var db = CreateStore(String.Format("{0}.ged", fileName), testFile);
             Family newFamily = CreateTestFamily();
-            if (husbandId > 0)
-            {
-                newFamily.HusbandId = husbandId;
-            }
-            if (wifeId > 0)
-            {
-                newFamily.WifeId = wifeId;
-            }
+            newFamily.HusbandId = husbandId;
+            newFamily.WifeId = wifeId;
 
             //Act
             db.AddFamily(newFamily);
-            db.SaveChangesAsync();
+            db.SaveChanges();
 
             //Assert
             GEDCOMAssert.IsValidOutput(GetEmbeddedFileString(updatedFileName), GetFileString(testFile));
         }
 
         [Test]
-        [TestCase("TwoIndividuals", 1, "TwoIndividuals_AddFamilyAddChild1")]
-        [TestCase("TwoIndividuals", 2, "TwoIndividuals_AddFamilyAddChild2")]
-        public void GEDCOMStore_AddFamily_Should_Add_Child(string fileName, int childId, string updatedFileName)
+        [TestCase("TwoIndividuals", "1", "TwoIndividuals_AddFamilyAddChild1")]
+        [TestCase("TwoIndividuals", "2", "TwoIndividuals_AddFamilyAddChild2")]
+        public void GEDCOMStore_AddFamily_Should_Add_Child(string fileName, string childId, string updatedFileName)
         {
             //Arrange
             const string testFile = "AddFamily.ged";
@@ -110,7 +104,7 @@ namespace FamilyTreeProject.Data.GEDCOM.Tests
 
             //Act
             db.AddFamily(newFamily);
-            db.SaveChangesAsync();
+            db.SaveChanges();
 
             //Assert
             GEDCOMAssert.IsValidOutput(GetEmbeddedFileString(updatedFileName), GetFileString(testFile));
@@ -134,10 +128,10 @@ namespace FamilyTreeProject.Data.GEDCOM.Tests
         }
 
         [Test]
-        [TestCase("OneFamily", 1, 0)]
-        [TestCase("TwoFamilies", 1, 1)]
-        [TestCase("TwoFamilies", 2, 1)]
-        public void GEDCOMStore_DeleteFamily_Should_Remove_The_Family_From_The_Document(string fileName, int idToDelete, int recordCount)
+        [TestCase("OneFamily", "1", 0)]
+        [TestCase("TwoFamilies", "1", 1)]
+        [TestCase("TwoFamilies", "2", 1)]
+        public void GEDCOMStore_DeleteFamily_Should_Remove_The_Family_From_The_Document(string fileName, string idToDelete, int recordCount)
         {
             //Arrange
             const string testFile = "DeleteFamily.ged";
@@ -146,16 +140,16 @@ namespace FamilyTreeProject.Data.GEDCOM.Tests
 
             //Act
             db.DeleteFamily(family);
-            db.SaveChangesAsync();
+            db.SaveChanges();
 
             //Assert
             Assert.AreEqual(recordCount, GetFamilyCount(testFile));
         }
 
         [Test]
-        [TestCase("OneFamily", 2, 1)]
-        [TestCase("TwoFamilies", 3, 2)]
-        public void GEDCOMStore_DeleteFamily_Should_Throw_If_Family_Not_In_Document(string fileName, int idToDelete, int recordCount)
+        [TestCase("OneFamily", "2", 1)]
+        [TestCase("TwoFamilies", "3", 2)]
+        public void GEDCOMStore_DeleteFamily_Should_Throw_If_Family_Not_In_Document(string fileName, string idToDelete, int recordCount)
         {
             //Arrange
             string testFile = "DeleteFamily.ged";
@@ -184,9 +178,9 @@ namespace FamilyTreeProject.Data.GEDCOM.Tests
         }
 
         [Test]
-        [TestCase("OneFamily", 1, "OneFamily_UpdateFamily")]
-        [TestCase("TwoFamilies", 2, "TwoFamilies_UpdateFamily")]
-        public void GEDCOMStore_UpdateFamily_Should_Update_Properties_Of_The_Family(string fileName, int idToUpdate, string updatedFileName)
+        [TestCase("OneFamily", "1", "OneFamily_UpdateFamily")]
+        [TestCase("TwoFamilies", "2", "TwoFamilies_UpdateFamily")]
+        public void GEDCOMStore_UpdateFamily_Should_Update_Properties_Of_The_Family(string fileName, string idToUpdate, string updatedFileName)
         {
             //Arrange
             string testFile = "UpdateFamily.ged";
@@ -196,16 +190,16 @@ namespace FamilyTreeProject.Data.GEDCOM.Tests
 
             //Act
             db.UpdateFamily(updateFamily);
-            db.SaveChangesAsync();
+            db.SaveChanges();
 
             //Assert
             GEDCOMAssert.IsValidOutput(GetEmbeddedFileString(updatedFileName), GetFileString(testFile));
         }
 
         [Test]
-        [TestCase("OneFamily", 2, 1)]
-        [TestCase("TwoFamilies", 3, 2)]
-        public void GEDCOMStore_UpdateFamily_Should_Throw_If_Family_Not_In_Document(string fileName, int idToUpdate, int recordCount)
+        [TestCase("OneFamily", "2", 1)]
+        [TestCase("TwoFamilies", "3", 2)]
+        public void GEDCOMStore_UpdateFamily_Should_Throw_If_Family_Not_In_Document(string fileName, string idToUpdate, int recordCount)
         {
             //Arrange
             string testFile = "UpdateFamily.ged";
@@ -220,7 +214,7 @@ namespace FamilyTreeProject.Data.GEDCOM.Tests
 
         #region Other Helpers
 
-        private Family CreateTestFamily(int id = -1)
+        private Family CreateTestFamily(string id = "")
         {
             // Create a test family
             var newFamily = new Family

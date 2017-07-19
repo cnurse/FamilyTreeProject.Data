@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FamilyTreeProject.Data.GEDCOM.Tests</RootNamespace>
     <AssemblyName>FamilyTreeProject.Data.GEDCOM.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SccProjectName>
@@ -183,50 +183,41 @@
     <EmbeddedResource Include="TestFiles\FourIndividuals_AddIndividualAddFamilyAddWife.ged" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\FamilyTreeProject.Core\src\FamilyTreeProject.Core\FamilyTreeProject.Core.csproj">
+      <Project>{ba58d9f1-31a6-4bde-9396-0aba7ee082d9}</Project>
+      <Name>FamilyTreeProject.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\FamilyTreeProject.DomainServices\tests\FamilyTreeProject.TestUtilities\FamilyTreeProject.TestUtilities.csproj">
+      <Project>{e5b4368f-6bc1-46d8-9b4d-88fe08682aa1}</Project>
+      <Name>FamilyTreeProject.TestUtilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\FamilyTreeProject.GEDCOM\src\FamilyTreeProject.GEDCOM\FamilyTreeProject.GEDCOM.csproj">
+      <Project>{7d940b59-fbb4-4a6e-a8ad-2f698205e1ef}</Project>
+      <Name>FamilyTreeProject.GEDCOM</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\FamilyTreeProject.Data.GEDCOM\FamilyTreeProject.Data.GEDCOM.csproj">
       <Project>{4b904183-f155-42a3-8cfd-0d907bb10cda}</Project>
       <Name>FamilyTreeProject.Data.GEDCOM</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FamilyTreeProject.TestUtilities\FamilyTreeProject.TestUtilities.csproj">
-      <Project>{e5b4368f-6bc1-46d8-9b4d-88fe08682aa1}</Project>
-      <Name>FamilyTreeProject.TestUtilities</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="FamilyTreeProject.Core, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\FamilyTreeProject.Core.0.4.0\lib\FamilyTreeProject.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="FamilyTreeProject.GEDCOM, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\FamilyTreeProject.GEDCOM.1.1.0\lib\FamilyTreeProject.GEDCOM.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Castle.Core, Version=4.1.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\Users\Charles.Nurse\OneDrive\Visual Studio Projects\MyFamilyTreeProject\packages\Castle.Core.4.1.0\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="Moq">
-      <HintPath>..\..\..\FamilyTreeProject\src\packages\Moq.4.2.1506.2016\lib\net40\Moq.dll</HintPath>
-    </Reference>
-    <Reference Include="Naif.Core, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Naif.Core.1.4.0\lib\Naif.Core.dll</HintPath>
+      <HintPath>..\..\..\..\..\Users\Charles.Nurse\OneDrive\Visual Studio Projects\MyFamilyTreeProject\packages\Moq.4.7.25\lib\net45\Moq.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Naif.Data, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Naif.Data.1.5.0\lib\Naif.Data.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\..\..\FamilyTreeProject\src\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="PCLStorage, Version=1.0.2.0, Culture=neutral, PublicKeyToken=286fe515a2c35b64, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\FamilyTreeProject\src\packages\PCLStorage.1.0.2\lib\net45\PCLStorage.dll</HintPath>
+    <Reference Include="nunit.framework, Version=3.7.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\Users\Charles.Nurse\OneDrive\Visual Studio Projects\MyFamilyTreeProject\packages\NUnit.3.7.1\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.IO.FileSystem, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\Users\Charles.Nurse\OneDrive\Visual Studio Projects\MyFamilyTreeProject\packages\System.IO.FileSystem.4.3.0\lib\net46\System.IO.FileSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\Users\Charles.Nurse\OneDrive\Visual Studio Projects\MyFamilyTreeProject\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\..\..\FamilyTreeProject\src\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\FamilyTreeProject\src\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\FamilyTreeProject\src\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\FamilyTreeProject\src\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
-  </Target>
 </Project>

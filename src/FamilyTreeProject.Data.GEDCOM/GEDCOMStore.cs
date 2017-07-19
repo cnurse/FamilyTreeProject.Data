@@ -8,15 +8,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using FamilyTreeProject.Common;
+using FamilyTreeProject.Contracts;
 using FamilyTreeProject.GEDCOM;
 using FamilyTreeProject.GEDCOM.Common;
 using FamilyTreeProject.GEDCOM.Records;
 using FamilyTreeProject.GEDCOM.Structures;
-using Naif.Core.Contracts;
-using PCLStorage;
+
 // ReSharper disable UseNullPropagation
 
 // ReSharper disable InconsistentNaming
@@ -28,7 +28,7 @@ namespace FamilyTreeProject.Data.GEDCOM
     {
         private GEDCOMDocument _document;
         private readonly string _path;
-        private const int DEFAULT_TREE_ID = 1;
+        private readonly string DEFAULT_TREE_ID = "1";
 
         public GEDCOMStore(string path)
         {
@@ -51,12 +51,12 @@ namespace FamilyTreeProject.Data.GEDCOM
         {
             var newFamily = new Family();
 
-            if (individual.FatherId > 0)
+            if (!string.IsNullOrEmpty(individual.FatherId))
             {
                 //New father
                 newFamily.HusbandId = individual.FatherId;
             }
-            if (individual.MotherId > 0)
+            if (!string.IsNullOrEmpty(individual.MotherId))
             {
                 //New mother
                 newFamily.WifeId = individual.MotherId;
@@ -70,10 +70,16 @@ namespace FamilyTreeProject.Data.GEDCOM
 
         private GEDCOMFamilyRecord GetFamilyRecord(Individual individual)
         {
-            int fatherId = individual.FatherId.GetValueOrDefault();
-            int motherId = individual.MotherId.GetValueOrDefault();
+            string fatherId = individual.FatherId;
+            string motherId = individual.MotherId;
 
-            return _document.SelectFamilyRecord(GEDCOMUtil.CreateId("I", fatherId), GEDCOMUtil.CreateId("I", motherId));
+
+            var familyRecord = !string.IsNullOrEmpty(fatherId)
+                ? (!string.IsNullOrEmpty(motherId)
+                    ? _document.SelectFamilyRecord(GEDCOMUtil.CreateId("I", fatherId), GEDCOMUtil.CreateId("I", motherId))
+                    : _document.SelectHusbandsFamilyRecords(GEDCOMUtil.CreateId("I", fatherId)).FirstOrDefault())
+                : _document.SelectWifesFamilyRecords(GEDCOMUtil.CreateId("I", motherId)).FirstOrDefault();
+            return familyRecord;
         }
 
         private void Initialize()
@@ -92,13 +98,11 @@ namespace FamilyTreeProject.Data.GEDCOM
         {
             _document = new GEDCOMDocument();
 
-            var fileStorage = FileSystem.Current;
-            var file = fileStorage.GetFileFromPathAsync(_path).Result;
-
-            using (var stream = file.OpenAsync(FileAccess.Read).Result)
+            using (var stream = new FileStream(_path, FileMode.Open, FileAccess.Read))
             {
                 _document.Load(stream);
             }
+
         }
 
         private void ProcessCitations(Entity entity, List<GEDCOMSourceCitationStructure> citations)
@@ -204,7 +208,7 @@ namespace FamilyTreeProject.Data.GEDCOM
                 foreach (string child in familyRecord.Children)
                 {
                     var childId = GEDCOMUtil.GetId(child);
-                    if (childId > -1)
+                    if (!string.IsNullOrEmpty(childId))
                     {
                         var individual = Individuals.SingleOrDefault(ind => ind.Id == childId);
                         if (individual != null)
@@ -409,7 +413,7 @@ namespace FamilyTreeProject.Data.GEDCOM
             }
             else
             {
-                if (individual.FatherId > 0 || individual.MotherId > 0)
+                if (!string.IsNullOrEmpty(individual.FatherId) || !string.IsNullOrEmpty(individual.MotherId))
                 {
                     familyRecord = GetFamilyRecord(individual);
 
@@ -431,19 +435,19 @@ namespace FamilyTreeProject.Data.GEDCOM
         {
             Requires.NotNull("family", family);
 
-            family.Id = _document.Records.GetNextId(GEDCOMTag.FAM);
+            family.Id = _document.Records.GetNextId(GEDCOMTag.FAM).ToString();
 
             var record = new GEDCOMFamilyRecord(family.Id);
-            if (family.HusbandId.HasValue)
+            if (!string.IsNullOrEmpty(family.HusbandId))
             {
                 //Add HUSB
-                record.AddHusband(GEDCOMUtil.CreateId("I", family.HusbandId.Value));
+                record.AddHusband(GEDCOMUtil.CreateId("I", family.HusbandId));
             }
 
-            if (family.WifeId.HasValue)
+            if (!string.IsNullOrEmpty(family.WifeId))
             {
                 //Add WIFE
-                record.AddWife(GEDCOMUtil.CreateId("I", family.WifeId.Value));
+                record.AddWife(GEDCOMUtil.CreateId("I", family.WifeId));
             }
 
             foreach (Individual child in family.Children)
@@ -463,7 +467,7 @@ namespace FamilyTreeProject.Data.GEDCOM
             Individuals.Add(individual);
 
             //Add underlying GEDCOM record
-            individual.Id = _document.Records.GetNextId(GEDCOMTag.INDI);
+            individual.Id = _document.Records.GetNextId(GEDCOMTag.INDI).ToString();
 
             var record = new GEDCOMIndividualRecord(individual.Id);
             var name = new GEDCOMNameStructure(String.Format("{0} /{1}/", individual.FirstName, individual.LastName), record.Level + 1);
@@ -538,12 +542,12 @@ namespace FamilyTreeProject.Data.GEDCOM
             }
         }
 
-        public async void SaveChangesAsync()
+        public void SaveChanges()
         {
-            var fileStorage = FileSystem.Current;
-            var file = fileStorage.GetFileFromPathAsync(_path).Result;
-
-            await file.WriteAllTextAsync(_document.SaveGEDCOM());
+            using (var stream = new FileStream(_path, FileMode.Create, FileAccess.Write))
+            {
+                _document.Save(stream);
+            }
         }
 
         public void UpdateFamily(Family family)

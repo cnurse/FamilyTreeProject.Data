@@ -7,37 +7,32 @@
 // *****************************************
 
 using System;
-using Naif.Core.Caching;
-using Naif.Core.Contracts;
-using Naif.Data;
+using FamilyTreeProject.Contracts;
+using FamilyTreeProject.Core;
 
 namespace FamilyTreeProject.Data.GEDCOM
 {
     public class GEDCOMUnitOfWork : IUnitOfWork
     {
-        private ICacheProvider _cache;
         private IGEDCOMStore _database;
 
-        public GEDCOMUnitOfWork(string path, ICacheProvider cache)
+        public GEDCOMUnitOfWork(string path)
         {
             Requires.NotNullOrEmpty("path", path);
-            Requires.NotNull("cache", cache);
             
-            Initialize(new GEDCOMStore(path), cache);
+            Initialize(new GEDCOMStore(path));
         }
 
-        public GEDCOMUnitOfWork(IGEDCOMStore database, ICacheProvider cache)
+        public GEDCOMUnitOfWork(IGEDCOMStore database)
         {
             Requires.NotNull("database", database);
-            Requires.NotNull("cache", cache);
 
-            Initialize(database, cache);
+            Initialize(database);
         }
 
-        private void Initialize(IGEDCOMStore database, ICacheProvider cache)
+        private void Initialize(IGEDCOMStore database)
         {
             _database = database;
-            _cache = cache;
         }
 
         public void BeginTransaction()
@@ -48,7 +43,7 @@ namespace FamilyTreeProject.Data.GEDCOM
 
         public void Commit()
         {
-            _database.SaveChangesAsync();
+            _database.SaveChanges();
         }
 
         public IRepository<T> GetRepository<T>() where T : class

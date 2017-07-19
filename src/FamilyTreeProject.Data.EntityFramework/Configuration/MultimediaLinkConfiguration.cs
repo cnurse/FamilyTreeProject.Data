@@ -7,26 +7,25 @@
 // *****************************************
 
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity.ModelConfiguration;
 
 namespace FamilyTreeProject.Data.EntityFramework.Configuration
 {
-    public class MultimediaLinkConfiguration : EntityTypeConfiguration<MultimediaLink>
-    {
-        public MultimediaLinkConfiguration()
-        {
-            ToTable("MultimediaLinks");
-            Property(m => m.Id)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            Property(m => m.TreeId);
-            Property(m => m.OwnerId);
-            Property(m => m.OwnerType);
-            Property(m => m.File);
-            Property(m => m.Format);
-            Property(m => m.Title);
+    //public class MultimediaLinkConfiguration : EntityTypeConfiguration<MultimediaLink>
+    //{
+    //    public MultimediaLinkConfiguration()
+    //    {
+    //        ToTable("MultimediaLinks");
+    //        Property(m => m.Id)
+    //            .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+    //        Property(m => m.TreeId);
+    //        Property(m => m.OwnerId);
+    //        Property(m => m.OwnerType);
+    //        Property(m => m.File);
+    //        Property(m => m.Format);
+    //        Property(m => m.Title);
 
-            Ignore(m => m.Multimedia);
-            Ignore(m => m.Notes);
-        }
-    }
+    //        Ignore(m => m.Multimedia);
+    //        Ignore(m => m.Notes);
+    //    }
+    //}
 }

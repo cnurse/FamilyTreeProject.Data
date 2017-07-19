@@ -9,10 +9,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using Naif.Core.Collections;
-using Naif.Core.Contracts;
-using Naif.Data;
+using FamilyTreeProject.Collections;
+using FamilyTreeProject.Contracts;
 
 namespace FamilyTreeProject.Data.GEDCOM
 {
@@ -51,12 +49,12 @@ namespace FamilyTreeProject.Data.GEDCOM
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Family> Find(Expression<Func<Family, bool>> predicate)
+        public IEnumerable<Family> Find(Func<Family, bool> predicate)
         {
             return GetAll().Where(predicate);
         }
 
-        public IPagedList<Family> Find(int pageIndex, int pageSize, Expression<Func<Family, bool>> predicate)
+        public IPagedList<Family> Find(int pageIndex, int pageSize, Func<Family, bool> predicate)
         {
             return GetAll().Where(predicate).InPagesOf(pageSize).GetPage(pageIndex);
         }
@@ -81,9 +79,9 @@ namespace FamilyTreeProject.Data.GEDCOM
             throw new NotImplementedException();
         }
 
-        public IQueryable<Family> GetAll()
+        public IEnumerable<Family> GetAll()
         {
-            return _database.Families.AsQueryable();
+            return _database.Families;
         }
 
         public IPagedList<Family> GetPage(int pageIndex, int pageSize)

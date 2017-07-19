@@ -7,24 +7,23 @@
 // *****************************************
 
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity.ModelConfiguration;
 
 namespace FamilyTreeProject.Data.EntityFramework.Configuration
 {
-    public class NoteConfiguration : EntityTypeConfiguration<Note>
-    {
-        public NoteConfiguration()
-        {
-            ToTable("Notes");
-            Property(n => n.Id)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            Property(n => n.TreeId);
-            Property(n => n.OwnerId);
-            Property(n => n.OwnerType);
-            Property(n => n.Text);
+    //public class NoteConfiguration : EntityTypeConfiguration<Note>
+    //{
+    //    public NoteConfiguration()
+    //    {
+    //        ToTable("Notes");
+    //        Property(n => n.Id)
+    //            .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+    //        Property(n => n.TreeId);
+    //        Property(n => n.OwnerId);
+    //        Property(n => n.OwnerType);
+    //        Property(n => n.Text);
 
-            Ignore(n => n.Multimedia);
-            Ignore(n => n.Notes);
-        }
-    }
+    //        Ignore(n => n.Multimedia);
+    //        Ignore(n => n.Notes);
+    //    }
+    //}
 }

@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using FamilyTreeProject.Core;
 using Moq;
 using NUnit.Framework;
 

@@ -7,37 +7,32 @@
 // *****************************************
 
 using System;
-using Naif.Core.Caching;
-using Naif.Core.Contracts;
-using Naif.Data;
+using FamilyTreeProject.Contracts;
+using Microsoft.EntityFrameworkCore;
 
 namespace FamilyTreeProject.Data.EntityFramework
 {
-    public class EFUnitOfWork : IUnitOfWork, IDisposable
+    public class EFUnitOfWork : IUnitOfWork
     {
         private FamilyTreeContext _db;
-        private ICacheProvider _cache;
 
-        public EFUnitOfWork(string connectionStringName, ICacheProvider cache)
+        public EFUnitOfWork(DbContextOptions<FamilyTreeContext> options)
         {
-            Requires.NotNullOrEmpty("connectionStringName", connectionStringName);
-            Requires.NotNull(cache);
+            Requires.NotNull(options);
 
-            Initialize(new FamilyTreeContext(connectionStringName), cache);
+            Initialize(new FamilyTreeContext(options));
         }
 
-        public EFUnitOfWork(FamilyTreeContext db, ICacheProvider cache)
+        public EFUnitOfWork(FamilyTreeContext db)
         {
             Requires.NotNull(db);
-            Requires.NotNull(cache);
 
-            Initialize(db, cache);
+            Initialize(db);
         }
 
-        private void Initialize(FamilyTreeContext db, ICacheProvider cache)
+        private void Initialize(FamilyTreeContext db)
         {
             _db = db;
-            _cache = cache;
         }
 
         public void Dispose()
@@ -52,7 +47,7 @@ namespace FamilyTreeProject.Data.EntityFramework
 
         public IRepository<T> GetRepository<T>() where T : class
         {
-            return new EFRepository<T>(_db, _cache);
+            return new EFRepository<T>(_db);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace FamilyTreeProject.Data.GEDCOM.Tests
     [TestFixture]
     public partial class GEDCOMStoreTests : GEDCOMTestBase
     {
-        private readonly int _treeId = int.Parse(IndividualsResources.TreeId);
+        private readonly string _treeId = IndividualsResources.TreeId;
 
         #region Protected Properties
 
@@ -81,15 +81,15 @@ namespace FamilyTreeProject.Data.GEDCOM.Tests
             var db = CreateStore(String.Format("{0}.ged", fileName), testFile);
 
             //Act
-            var testIndividual = db.Individuals.SingleOrDefault(ind => ind.Id == 1);
+            var testIndividual = db.Individuals.SingleOrDefault(ind => ind.Id == "1");
 
             //Assert
             if (testIndividual != null)
             {
                 Assert.AreEqual("John", testIndividual.FirstName);
                 Assert.AreEqual("Smith", testIndividual.LastName);
-                Assert.AreEqual(2, testIndividual.FatherId);
-                Assert.AreEqual(3, testIndividual.MotherId);
+                Assert.AreEqual("2", testIndividual.FatherId);
+                Assert.AreEqual("3", testIndividual.MotherId);
             }
         }
 

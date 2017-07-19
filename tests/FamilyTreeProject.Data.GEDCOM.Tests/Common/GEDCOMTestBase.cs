@@ -25,7 +25,7 @@ namespace FamilyTreeProject.GEDCOM.Data.Tests.Common
 
         protected string GetEmbeddedFileName(string fileName)
         {
-            string fullName = String.Format("{0}.{1}", EmbeddedFilePath, fileName);
+            string fullName = $"{EmbeddedFilePath}.{fileName}";
             if (!fullName.ToLower().EndsWith(".ged"))
             {
                 fullName += ".ged";
@@ -44,7 +44,7 @@ namespace FamilyTreeProject.GEDCOM.Data.Tests.Common
                 string line = "";
                 while ((line = reader.ReadLine()) != null)
                 {
-                    text += String.Format("{0}\n", line);
+                    text += $"{line}\n";
                 }
             }
             return text;
@@ -52,7 +52,7 @@ namespace FamilyTreeProject.GEDCOM.Data.Tests.Common
 
         private string GetFileName(string fileName)
         {
-            string fullName = String.Format("{0}\\{1}", FilePath, fileName);
+            string fullName = $"{FilePath}\\{fileName}";
             if (!fullName.ToLower().EndsWith(".ged"))
             {
                 fullName += ".ged";
@@ -74,7 +74,7 @@ namespace FamilyTreeProject.GEDCOM.Data.Tests.Common
                 string line = "";
                 while ((line = reader.ReadLine()) != null)
                 {
-                    text += String.Format("{0}\n", line);
+                    text += $"{line}\n";
                 }
             }
             return text;

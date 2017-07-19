@@ -7,21 +7,21 @@
 // *****************************************
 
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity.ModelConfiguration;
+using FamilyTreeProject.Core;
 
 namespace FamilyTreeProject.Data.EntityFramework.Configuration
 {
-    public class TreeConfiguration : EntityTypeConfiguration<Tree>
-    {
-        public TreeConfiguration()
-        {
-            ToTable("Trees");
-            Property(t => t.TreeId)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            Property(t => t.Name);
-            Property(t => t.OwnerId);
+    //public class TreeConfiguration : EntityTypeConfiguration<Tree>
+    //{
+    //    public TreeConfiguration()
+    //    {
+    //        ToTable("Trees");
+    //        Property(t => t.TreeId)
+    //            .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+    //        Property(t => t.Name);
+    //        Property(t => t.OwnerId);
 
-            Ignore(t => t.HomeIndividualId);
-        }
-    }
+    //        Ignore(t => t.HomeIndividualId);
+    //    }
+    //}
 }

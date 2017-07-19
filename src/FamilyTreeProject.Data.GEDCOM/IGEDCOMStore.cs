@@ -7,6 +7,7 @@
 // *****************************************
 
 using System.Collections.Generic;
+using FamilyTreeProject.Core;
 
 namespace FamilyTreeProject.Data.GEDCOM
 {
@@ -24,7 +25,7 @@ namespace FamilyTreeProject.Data.GEDCOM
 
         void DeleteIndividual(Individual individual);
 
-        void SaveChangesAsync();
+        void SaveChanges();
 
         void UpdateFamily(Family family);
 

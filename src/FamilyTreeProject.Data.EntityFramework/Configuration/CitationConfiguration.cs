@@ -7,27 +7,27 @@
 // *****************************************
 
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity.ModelConfiguration;
+using FamilyTreeProject.Core;
 
 namespace FamilyTreeProject.Data.EntityFramework.Configuration
 {
-    public class CitationConfiguration : EntityTypeConfiguration<Citation>
-    {
-        public CitationConfiguration()
-        {
-            ToTable("Citations");
-            Property(cit => cit.Id)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            Property(cit => cit.TreeId);
-            Property(cit => cit.SourceId);
-            Property(cit => cit.OwnerId);
-            Property(cit => cit.OwnerType);
-            Property(cit => cit.Date);
-            Property(cit => cit.Page);
-            Property(cit => cit.Text);
+    //public class CitationConfiguration : EntityTypeConfiguration<Citation>
+    //{
+    //    public CitationConfiguration()
+    //    {
+    //        ToTable("Citations");
+    //        Property(cit => cit.Id)
+    //            .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+    //        Property(cit => cit.TreeId);
+    //        Property(cit => cit.SourceId);
+    //        Property(cit => cit.OwnerId);
+    //        Property(cit => cit.OwnerType);
+    //        Property(cit => cit.Date);
+    //        Property(cit => cit.Page);
+    //        Property(cit => cit.Text);
 
-            Ignore(cit => cit.Multimedia);
-            Ignore(cit => cit.Notes);
-        }
-    }
+    //        Ignore(cit => cit.Multimedia);
+    //        Ignore(cit => cit.Notes);
+    //    }
+    //}
 }
